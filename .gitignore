@@ -2,13 +2,18 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Mm]emoryCaptures/
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+Editor Default Resources/
+ExternalDependencyManager/
+Firebase/
+Plugins/
+StreamingAssets/
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
@@ -53,6 +58,9 @@ ExportedObj/
 
 # Unity3D generated file on crash reports
 sysinfo.txt
+
+google-services.json
+google-services.json.meta
 
 # Builds
 *.apk
