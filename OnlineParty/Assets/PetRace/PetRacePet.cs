@@ -10,6 +10,7 @@ public class PetRacePet : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI nameTM;
     [SerializeField] Slider staminaSlider;
+    [SerializeField] Transform _modelTransform;
 
     public float runMultiplier = 1.25f;
     public float maxStamina = 100.0f;
@@ -61,6 +62,7 @@ public class PetRacePet : MonoBehaviour
         staminaRegeneration = petData.regen;
         staminaConsumption = petData.depletion;
 
+        Instantiate(PetRacePetModels.Instance.GetModel(petData.modelNo), _modelTransform);
         nameTM.text = petData.name;
 
         foreach (IPetRacePerk perk in petData.perks)

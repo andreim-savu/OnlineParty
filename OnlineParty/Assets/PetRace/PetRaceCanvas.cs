@@ -45,8 +45,9 @@ public class IPetRacePet
     public float dodge; //avoid obstacles
     public float regen; //stamina regen
     public float depletion; //stamina depletion
+    public int modelNo;
 
-    public IPetRacePet(string _id, string _name, int _movementSpeed, int _dodge, int _regen, int _depletion)
+    public IPetRacePet(string _id, string _name, int _movementSpeed, int _dodge, int _regen, int _depletion, int _modelNo)
     {
         id = _id;
         name = _name;
@@ -54,6 +55,7 @@ public class IPetRacePet
         dodge = _dodge;
         regen = _regen;
         depletion = _depletion;
+        modelNo = _modelNo;
 
         perks = new List<IPetRacePerk>();
     }
@@ -124,10 +126,10 @@ public class PetRaceCanvas : GameCanvas
         {
             if (_roomData._players[i].pet == null) { continue; }
             LobbyPet newPet = Instantiate(_lobbyPet, _lobbyPetsContainer);
-            int posX = -3 + 3 * (i % 3);
-            int posZ = -3 + 3 * (i / 3);
+            int posX = -3 + 3 * (i / 3);
+            int posZ = -3 + 3 * (i % 3);
             newPet.transform.localPosition = new Vector3(posX, newPet.transform.localPosition.y, posZ);
-            newPet.InitPet(_roomData._players[i].pet.name);
+            newPet.InitPet(_roomData._players[i].pet.name, _roomData._players[i].pet.modelNo);
         }
     }
 

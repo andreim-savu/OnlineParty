@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4bc43da36ef95e4aa74b8b90130acc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalTile: {fileID: 7647335082104298739, guid: de30bb1db9cb87c4eafe7f9a78936272, type: 3}
-  sandTile: {fileID: 8715588447042032606, guid: 192a782b89ce7534fb743f3b6186507c, type: 3}
-  waterTile: {fileID: 4084600163369709405, guid: 8b72e8ad49363104e91108aedbb7bbea, type: 3}
-  obstacleTile: {fileID: 5973044468553814655, guid: 5410728351ecf71419af950d4f14ac51, type: 3}
+  normalTile: {fileID: 5352809167590970037, guid: de30bb1db9cb87c4eafe7f9a78936272, type: 3}
+  sandTile: {fileID: 3374766196677923005, guid: a042f53efd8a77e4086b9f92d120fcc4, type: 3}
+  waterTile: {fileID: 802571659709176959, guid: aac51f50f8e84d14b80fa646dc9df034, type: 3}
+  obstacleTile: {fileID: 412417742686038806, guid: 6ec2b74b034089248bd8236cf2d4dc96, type: 3}
+  finishTile: {fileID: 4024692040434633211, guid: ac699a4f73fbfb1448ef7c8fe4fcad50, type: 3}
