@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PetRacePerkIntelligenceUp : PetRacePerk
+public class PetRacePerkDodgeChanceUp : PetRacePerk
 {
     public override void InitPerk(PetRacePet pet, int level)
     {
@@ -11,19 +11,19 @@ public class PetRacePerkIntelligenceUp : PetRacePerk
         switch (_level)
         {
             case 1:
-                _pet.intelligence += 3;
+                _pet.obstacleAvoidChance += 5;
                 break;
             case 2:
-                _pet.intelligence += 6;
+                _pet.obstacleAvoidChance += 10;
                 break;
             case 3:
-                _pet.intelligence += 9;
+                _pet.obstacleAvoidChance += 15;
                 break;
             case 4:
-                _pet.intelligence += 12;
+                _pet.obstacleAvoidChance += 20;
                 break;
             case 5:
-                _pet.intelligence += 15;
+                _pet.obstacleAvoidChance += 25;
                 break;
         }
     }

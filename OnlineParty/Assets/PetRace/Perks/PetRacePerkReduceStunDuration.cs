@@ -8,7 +8,7 @@ public class PetRacePerkReduceStunDuration : PetRacePerk
     {
         _pet = pet;
         _level = level;
-        _pet.baseMaxStunDuration -= _level switch
+        _pet.maxStunDuration -= _level switch
         {
             1 => 0.1f,
             2 => 0.2f,

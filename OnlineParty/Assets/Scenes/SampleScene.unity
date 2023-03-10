@@ -2868,6 +2868,7 @@ MonoBehaviour:
   _petObjects: []
   _lobbyPetsContainer: {fileID: 1517794011}
   _lobbyPet: {fileID: -1677459742412210313, guid: 03599440fcf15104bbe2e96c4a37ef3e, type: 3}
+  _inRace: 0
 --- !u!224 &652472391
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8806,6 +8807,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   petsToWatch: []
+  leadingPet: {fileID: 0}
 --- !u!1 &2103188428
 GameObject:
   m_ObjectHideFlags: 0

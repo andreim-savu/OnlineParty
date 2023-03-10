@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PetRacePerkAgilityUp : PetRacePerk
+public class PetRacePerkRunSpeedUp : PetRacePerk
 {
     public override void InitPerk(PetRacePet pet, int level)
     {
@@ -11,19 +11,19 @@ public class PetRacePerkAgilityUp : PetRacePerk
         switch (_level)
         {
             case 1:
-                _pet.agility += 3;
+                _pet.runMultiplier += 0.05f;
                 break;
             case 2:
-                _pet.agility += 6;
+                _pet.runMultiplier += 0.1f;
                 break;
             case 3:
-                _pet.agility += 9;
+                _pet.runMultiplier += 0.15f;
                 break;
             case 4:
-                _pet.agility += 12;
+                _pet.runMultiplier += 0.2f;
                 break;
             case 5:
-                _pet.agility += 15;
+                _pet.runMultiplier += 0.25f;
                 break;
         }
     }

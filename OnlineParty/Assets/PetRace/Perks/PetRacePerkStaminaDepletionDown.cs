@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PetRacePerkDexterityUp : PetRacePerk
+public class PetRacePerkStaminaDepletionDown : PetRacePerk
 {
     public override void InitPerk(PetRacePet pet, int level)
     {
@@ -11,19 +11,19 @@ public class PetRacePerkDexterityUp : PetRacePerk
         switch (_level)
         {
             case 1:
-                _pet.dexterity += 3;
+                _pet.staminaConsumption -= 1.0f;
                 break;
             case 2:
-                _pet.dexterity += 6;
+                _pet.staminaConsumption -= 2.0f;
                 break;
             case 3:
-                _pet.dexterity += 9;
+                _pet.staminaConsumption -= 3.0f;
                 break;
             case 4:
-                _pet.dexterity += 12;
+                _pet.staminaConsumption -= 4.0f;
                 break;
             case 5:
-                _pet.dexterity += 15;
+                _pet.staminaConsumption -= 5.0f;
                 break;
         }
     }

@@ -11,50 +11,25 @@ public class PetRacePet : MonoBehaviour
     [SerializeField] TextMeshProUGUI nameTM;
     [SerializeField] Slider staminaSlider;
 
-    public float baseMoveSpeed = 2.0f;
-    public float baseRunMultiplier = 1.25f;
-    public float baseObstacleAvoidChance = 5.0f;
-    public float baseStaminaRegeneration = 15.0f;
-    public float baseStaminaConsumption = 25.0f;
-    public float baseMaxStamina = 100.0f;
-    public float baseMaxStunDuration = 1.0f;
-    public float baseWaterMoveModifier = 0.5f;
-    public float baseSandMoveModifier = 0.5f;
+    public float runMultiplier = 1.25f;
+    public float maxStamina = 100.0f;
+    public float maxStunDuration = 1.0f;
+    public float waterMoveModifier = 0.5f;
+    public float sandMoveModifier = 0.5f;
+    public float currentStamina = 0;
+    public float stunDuration = 0.0f;
 
     public float movementSpeed;
-    public float runMultiplier;
-    float obstacleAvoidChance;
-    public float currentStamina = 0;
-    public float maxStamina;
-    float staminaRegeneration;
-    float staminaConsumption;
-    public float stunDuration = 0.0f;
-    public float maxStunDuration;
-    float waterMoveModifier;
-    float sandMoveModifier;
+    public float obstacleAvoidChance;
+    public float staminaRegeneration;
+    public float staminaConsumption;
 
     public float loudRunnerModifier = 1;
 
     void CalculatePetStats()
     {
-        movementSpeed = baseMoveSpeed + agility * 0.1f;
-        runMultiplier = baseRunMultiplier + strength * 0.02f;
-        obstacleAvoidChance = baseObstacleAvoidChance + intelligence * 0.8f;
-        maxStamina = baseMaxStamina;
-        staminaRegeneration = baseStaminaRegeneration + constitution * 0.5f;
-        staminaConsumption = baseStaminaConsumption - endurance * 0.05f;
-        maxStunDuration = baseMaxStunDuration - dexterity * 0.005f;
-        waterMoveModifier = baseWaterMoveModifier + dexterity * 0.01f;
-        sandMoveModifier = baseSandMoveModifier + dexterity * 0.01f;
         onStatsCalculated.Invoke();
     }
-
-    public int agility;
-    public int strength;
-    public int intelligence;
-    public int constitution;
-    public int endurance;
-    public int dexterity;
 
     public float raceProgress = 0f;
 
@@ -63,7 +38,7 @@ public class PetRacePet : MonoBehaviour
      
     public bool isRacing = false;
 
-    bool running = false;
+    public bool running = false;
 
     bool _isOnWater = false;
     bool _isOnSand = false;
@@ -81,12 +56,10 @@ public class PetRacePet : MonoBehaviour
 
     public void InitPet(IPetRacePet petData)
     {
-        agility = petData.agility;
-        strength = petData.strength;
-        intelligence = petData.intelligence;
-        constitution = petData.constitution;
-        endurance = petData.endurance;
-        dexterity = petData.dexterity;
+        movementSpeed = petData.movementSpeed;
+        obstacleAvoidChance = petData.dodge;
+        staminaRegeneration = petData.regen;
+        staminaConsumption = petData.depletion;
 
         nameTM.text = petData.name;
 
@@ -156,21 +129,37 @@ public class PetRacePet : MonoBehaviour
             char tileType = _track.GetTile(tilePos);
             if (tileType == '0')
             {
+                if (_isOnSand || _isOnWater)
+                {
+                    transform.localPosition += new Vector3(0, 0.2f, 0);
+                }
                 _isOnSand = false;
                 _isOnWater = false;
             }
             if (tileType == '1')
             {
+                if (!_isOnSand && !_isOnWater)
+                {
+                    transform.localPosition -= new Vector3(0, 0.2f, 0);
+                }
                 _isOnSand = true;
                 _isOnWater = false;
             }
             if (tileType == '2')
             {
+                if (!_isOnSand && !_isOnWater)
+                {
+                    transform.localPosition -= new Vector3(0, 0.2f, 0);
+                }
                 _isOnSand = false;
                 _isOnWater = true;
             }
             if (tileType == '3')
             {
+                if (_isOnSand || _isOnWater)
+                {
+                    transform.localPosition += new Vector3(0, 0.2f, 0);
+                }
                 _isOnSand = false;
                 _isOnWater = false;
                 if (UnityEngine.Random.Range(0, 101) > obstacleAvoidChance)
@@ -181,6 +170,10 @@ public class PetRacePet : MonoBehaviour
             }
             if (tileType == '4')
             {
+                if (_isOnSand || _isOnWater)
+                {
+                    transform.localPosition += new Vector3(0, 0.2f, 0);
+                }
                 isRacing = false;
                 raceProgress = 1;
                 PetRaceCanvas.Instance.HandleFinishRace();

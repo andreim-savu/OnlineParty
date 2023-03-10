@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PetRacePerkConstitutionUp : PetRacePerk
+public class PetRacePerkExcitedRunner : PetRacePerk
 {
+    float modifier;
     public override void InitPerk(PetRacePet pet, int level)
     {
         _pet = pet;
@@ -11,20 +12,27 @@ public class PetRacePerkConstitutionUp : PetRacePerk
         switch (_level)
         {
             case 1:
-                _pet.constitution += 3;
+                modifier = 1.2f;
                 break;
             case 2:
-                _pet.constitution += 6;
+                modifier = 1.4f;
                 break;
             case 3:
-                _pet.constitution += 9;
+                modifier = 1.6f;
                 break;
             case 4:
-                _pet.constitution += 12;
+                modifier = 1.8f;
                 break;
             case 5:
-                _pet.constitution += 15;
+                modifier = 2.0f;
                 break;
         }
+        _pet.onPerksAdded.AddListener(Action);
+    }
+
+    void Action()
+    {
+        _pet.staminaRegeneration *= modifier;
+        _pet.staminaConsumption *= modifier;
     }
 }
