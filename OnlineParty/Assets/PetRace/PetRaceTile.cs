@@ -8,6 +8,7 @@ public class PetRaceTile : MonoBehaviour
     [SerializeField] GameObject sandTile;
     [SerializeField] GameObject waterTile;
     [SerializeField] GameObject obstacleTile;
+    [SerializeField] GameObject finishTile;
 
     GameObject currentTile;
     char _tileType;
@@ -24,6 +25,7 @@ public class PetRaceTile : MonoBehaviour
             '1' => Instantiate(sandTile, transform),
             '2' => Instantiate(waterTile, transform),
             '3' => Instantiate(obstacleTile, transform),
+            '4' => Instantiate(finishTile, transform),
             _ => Instantiate(normalTile, transform),
         };
         _tileType = tileType;

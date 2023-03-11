@@ -28,6 +28,6 @@ public class PetRacePerkWaterSpecialist : PetRacePerk
                 break;
         }
 
-        _pet.baseWaterMoveModifier += modifier;
+        _pet.waterMoveModifier += modifier;
     }
 }

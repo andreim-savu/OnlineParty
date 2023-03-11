@@ -41,23 +41,21 @@ public class IPetRacePet
     public string id;
     public string name;
     public List<IPetRacePerk> perks;
-    public int agility;
-    public int strength;
-    public int intelligence;
-    public int constitution;
-    public int endurance;
-    public int dexterity;
+    public float movementSpeed; //speed
+    public float dodge; //avoid obstacles
+    public float regen; //stamina regen
+    public float depletion; //stamina depletion
+    public int modelNo;
 
-    public IPetRacePet(string _id, string _name, int _agi, int _str, int _int, int _con, int _end, int _dex)
+    public IPetRacePet(string _id, string _name, int _movementSpeed, int _dodge, int _regen, int _depletion, int _modelNo)
     {
         id = _id;
         name = _name;
-        agility = _agi;
-        strength = _str;
-        intelligence = _int;
-        constitution = _con;
-        endurance = _end;
-        dexterity = _dex;
+        movementSpeed = _movementSpeed;
+        dodge = _dodge;
+        regen = _regen;
+        depletion = _depletion;
+        modelNo = _modelNo;
 
         perks = new List<IPetRacePerk>();
     }
@@ -128,10 +126,10 @@ public class PetRaceCanvas : GameCanvas
         {
             if (_roomData._players[i].pet == null) { continue; }
             LobbyPet newPet = Instantiate(_lobbyPet, _lobbyPetsContainer);
-            int posX = -3 + 3 * (i % 3);
-            int posZ = -3 + 3 * (i / 3);
+            int posX = -3 + 3 * (i / 3);
+            int posZ = -3 + 3 * (i % 3);
             newPet.transform.localPosition = new Vector3(posX, newPet.transform.localPosition.y, posZ);
-            newPet.InitPet(_roomData._players[i].pet.name);
+            newPet.InitPet(_roomData._players[i].pet.name, _roomData._players[i].pet.modelNo);
         }
     }
 
@@ -172,7 +170,6 @@ public class PetRaceCanvas : GameCanvas
 
     async void HandleDatabaseChange(object sender, ValueChangedEventArgs args)
     {
-
         DataSnapshot roomData = await FirebaseDatabase.DefaultInstance.GetReference("rooms").Child(_roomId).GetValueAsync();
 
         _roomData = JsonUtility.FromJson<IPetRaceRoom>(roomData.GetRawJsonValue());
@@ -224,19 +221,14 @@ public class PetRaceCanvas : GameCanvas
             }
         }
 
-        foreach (IPetRacePlayer player in _roomData._players)
-        {
-            player.isReady = false;
-        }
-
         _roomData._state = "Race";
         UpdateRoom();
     }
 
 
-    void HandleRace()
+    async void HandleRace()
     {
-        StartRace();
+        await StartRace();
     }
 
     void UpdateRoom()
@@ -306,6 +298,7 @@ public class PetRaceCanvas : GameCanvas
 
     async Task StartRace()
     {
+        if (_inRace) { return; }
         foreach (IPetRacePlayer player in _roomData._players)
         {
             PetRacePet newPet = Instantiate(_petObj);
@@ -314,7 +307,6 @@ public class PetRaceCanvas : GameCanvas
         }
         List<PetRaceTrack> newTracks = _racetrack.InitRacetrack(_petObjects, 100);
         PlacePetsOnTrack(_petObjects, newTracks);
-        print("Finish Intializing track");
         InitProgressBar();
         raceCamera.InitCamera(_petObjects);
         _inRace = true;
@@ -360,6 +352,7 @@ public class PetRaceCanvas : GameCanvas
                 {
                     if (perk.level == 5)
                     {
+                        perkInList.level = 5;
                         continue;
                     }
                     else
@@ -382,6 +375,7 @@ public class PetRaceCanvas : GameCanvas
                 {
                     if (perk.level == 5)
                     {
+                        perkInList.level = 5;
                         continue;
                     }
                     else
@@ -411,19 +405,19 @@ public class PetRaceCanvas : GameCanvas
         for (int i = 0; i < 3; i++)
         {
             int randomNo = Random.Range(0, 101);
-            if (randomNo <= 1)
+            if (randomNo <= 65)
             {
                 int randomIndex = Random.Range(0, commonPerks.Count);
                 potentialPerks.Add(commonPerks[randomIndex]);
                 commonPerks.RemoveAt(randomIndex);
             }
-            else if(randomNo <= 2)
+            else if(randomNo <= 85)
             {
                 int randomIndex = Random.Range(0, rarePerks.Count);
                 potentialPerks.Add(rarePerks[randomIndex]);
                 rarePerks.RemoveAt(randomIndex);
             }
-            else if(randomNo <= 3)
+            else if(randomNo <= 95)
             {
                 int randomIndex = Random.Range(0, epicPerks.Count);
                 potentialPerks.Add(epicPerks[randomIndex]);

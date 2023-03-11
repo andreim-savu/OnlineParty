@@ -28,6 +28,6 @@ public class PetRacePerkSandSpecialist : PetRacePerk
                 break;
         }
 
-        _pet.baseSandMoveModifier += modifier;
+        _pet.sandMoveModifier += modifier;
     }
 }

@@ -42,7 +42,7 @@ public class PetRacePerkSlowStart : PetRacePerk
     {
         baseSpeedRef = _pet.movementSpeed;
         _pet.movementSpeed = _pet.movementSpeed / 2;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(8);
         _pet.movementSpeed = baseSpeedRef * movementSpeedModifier;
     }
 }

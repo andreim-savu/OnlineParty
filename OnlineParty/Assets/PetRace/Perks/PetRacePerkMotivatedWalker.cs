@@ -33,6 +33,7 @@ public class PetRacePerkMotivatedWalker : PetRacePerk
 
     void Active()
     {
-        _pet.stunDuration -= Mathf.Max(0, _pet.stunDuration - modifier);
+        if (_pet.running) { return; }
+        _pet.stunDuration = Mathf.Max(0, _pet.stunDuration - modifier);
     }
 }

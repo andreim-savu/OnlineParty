@@ -15,13 +15,13 @@ public class PetRacePerks : MonoBehaviour
 
     private void Start()
     {
-        perksDict.Add("0", "PetRacePerkAgilityUp");
-        perksDict.Add("1", "PetRacePerkStrengthUp");
-        perksDict.Add("2", "PetRacePerkIntelligenceUp");
-        perksDict.Add("3", "PetRacePerkConstitutionUp");
-        perksDict.Add("4", "PetRacePerkEnduranceUp");
-        perksDict.Add("5", "PetRacePerkDexterityUp");
-        perksDict.Add("6", "PetRacePerkAllStatsUp");
+        perksDict.Add("0", "PetRacePerkMoveSpeedUp");
+        perksDict.Add("1", "PetRacePerkDodgeChanceUp");
+        perksDict.Add("2", "PetRacePerkStaminaRegenUp");
+        perksDict.Add("3", "PetRacePerkStaminaDepletionDown");
+        perksDict.Add("4", "PetRacePerkExcitedRunner");
+        perksDict.Add("5", "PetRacePerkPowerWalker");
+        perksDict.Add("6", "PetRacePerkRunSpeedUp"); 
         perksDict.Add("7", "PetRacePerkAvoidObstacle");
         perksDict.Add("8", "PetRacePerkRunBurst"); 
         perksDict.Add("9", "PetRacePerkEnergySiphon");
@@ -36,7 +36,7 @@ public class PetRacePerks : MonoBehaviour
         perksDict.Add("18", "PetRacePerkWaterSpecialist");
         perksDict.Add("19", "PetRacePerkSandSpecialist");
         perksDict.Add("20", "PetRacePerkMotivatedWalker");
-        perksDict.Add("21", "PetRacePerkStatMotivation");
+        perksDict.Add("21", "PetRacePerkPickUpPace");
     }
 
     public string GetPerk(string index)
