@@ -9,7 +9,6 @@ public class PetRaceRaceCamera : MonoBehaviour
     [SerializeField] PetRacePet leadingPet;
     public void InitCamera(List<PetRacePet> pets)
     {
-        print("Initializing Camera");
         petsToWatch = pets;
         leadingPet = pets[0];
     }

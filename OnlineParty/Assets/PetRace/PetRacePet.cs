@@ -55,6 +55,8 @@ public class PetRacePet : MonoBehaviour
 
     public float extraRunFlatSpeed = 0;
 
+    public string id;
+
     public void InitPet(IPetRacePet petData)
     {
         movementSpeed = petData.movementSpeed;
@@ -64,6 +66,7 @@ public class PetRacePet : MonoBehaviour
 
         Instantiate(PetRacePetModels.Instance.GetModel(petData.modelNo), _modelTransform);
         nameTM.text = petData.name;
+        id = petData.id;
 
         foreach (IPetRacePerk perk in petData.perks)
         {
@@ -178,7 +181,7 @@ public class PetRacePet : MonoBehaviour
                 }
                 isRacing = false;
                 raceProgress = 1;
-                PetRaceCanvas.Instance.HandleFinishRace();
+                PetRaceCanvas.Instance.HandleFinishRace(this);
                 return;
             }
         }

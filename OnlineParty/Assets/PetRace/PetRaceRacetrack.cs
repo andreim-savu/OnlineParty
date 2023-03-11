@@ -20,7 +20,6 @@ public class PetRaceRacetrack : MonoBehaviour
 
     public List<PetRaceTrack> InitRacetrack(List<PetRacePet> pets, int trackLength)
     {
-        print("Initiating Racetrack");
         sandTrackMinLength = 4;
         waterTrackMinLength = 4;
         maxObstacles = 7;
