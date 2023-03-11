@@ -12,6 +12,7 @@ public struct IPetRaceRoom
     public string _gameName;
     public List<IPetRacePlayer> _players;
     public string _state;
+    public int _turnNo;
 
     public IPetRaceRoom(string roomCode)
     {
@@ -19,6 +20,7 @@ public struct IPetRaceRoom
         _roomCode = roomCode;
         _state = "Lobby";
         _players = new List<IPetRacePlayer>();
+        _turnNo = 1;
     }
 }
 
@@ -31,6 +33,9 @@ public class IPetRacePlayer
     public List<IPetRacePerk> inventoryPerks;
     public List<IPetRacePerk> perkSelectionPerks;
     public bool isReady;
+    public int coins;
+    public int freeRerolls;
+    public int score;
     public bool host;
 }
 
@@ -98,11 +103,16 @@ public class PetRaceCanvas : GameCanvas
     [SerializeField] Transform _lobbyPetsContainer;
     [SerializeField] LobbyPet _lobbyPet;
 
+    [SerializeField] GameObject _leaderboard;
+    [SerializeField] Transform _leaderboardPlayersContainer;
+    [SerializeField] PetRaceLeaderboardPlayer _leaderboardPlayerContainer;
+
     string _roomId;
 
     IPetRaceRoom _roomData;
 
     public bool _inRace;
+    int currentPetRanking = 1;
 
     private void Awake()
     {
@@ -204,7 +214,6 @@ public class PetRaceCanvas : GameCanvas
         foreach (IPetRacePlayer player in _roomData._players)
         {
             player.isReady = false;
-            AssignPerksToPlayer(player);
         }
 
         _roomData._state = "Loadout";
@@ -238,8 +247,9 @@ public class PetRaceCanvas : GameCanvas
         FirebaseDatabase.DefaultInstance.GetReference("rooms").Child(_roomId).SetRawJsonValueAsync(json);
     }
 
-    public void HandleFinishRace()
+    public void HandleFinishRace(PetRacePet finishingPet)
     {
+        AddScoreAndSetRerolls(finishingPet);
         foreach (PetRacePet pet in _petObjects)
         {
             if (pet.isRacing) { return; }
@@ -247,8 +257,8 @@ public class PetRaceCanvas : GameCanvas
 
         foreach (IPetRacePlayer player in _roomData._players)
         {
+            player.coins = 10;
             player.isReady = false;
-            AssignPerksToPlayer(player);
         }
 
         _roomData._state = "Loadout";
@@ -262,8 +272,38 @@ public class PetRaceCanvas : GameCanvas
         _petObjects.Clear();
         _racetrack.DestroyTrack();
         _inRace = false;
+        _roomData._turnNo++;
+        ShowLeaderboard();
 
         UpdateRoom();
+    }
+
+    void AddScoreAndSetRerolls(PetRacePet pet)
+    {
+        foreach (IPetRacePlayer player in _roomData._players)
+        {
+            if (pet.id == player.id)
+            {
+                switch (currentPetRanking)
+                {
+                    case 1:
+                        player.score += 100;
+                        break;
+                    case 2:
+                        player.score += 70;
+                        break;
+                    case 3:
+                        player.score += 50;
+                        break;
+                    default:
+                        player.score += 20;
+                        break;
+                }
+                player.freeRerolls = currentPetRanking - 1;
+                currentPetRanking++;
+                break;
+            }
+        }
     }
 
     void InitProgressBar()
@@ -299,6 +339,8 @@ public class PetRaceCanvas : GameCanvas
     async Task StartRace()
     {
         if (_inRace) { return; }
+        HideLeaderboard();
+        currentPetRanking = 1;
         foreach (IPetRacePlayer player in _roomData._players)
         {
             PetRacePet newPet = Instantiate(_petObj);
@@ -328,109 +370,33 @@ public class PetRaceCanvas : GameCanvas
         }
     }
 
-    void AssignPerksToPlayer(IPetRacePlayer player)
+    void ShowLeaderboard()
     {
-        List<IPetRacePerk> tempPerks = new List<IPetRacePerk>();
+        SetupLeaderboard();
+        _leaderboard.SetActive(true);
+    }
 
-        List<IPetRacePerk> potentialPerks = new List<IPetRacePerk>();
+    void HideLeaderboard()
+    {
+        _leaderboard.SetActive(false);
+    }
 
-        List<IPetRacePerk> commonPerks = new List<IPetRacePerk>();
-        List<IPetRacePerk> rarePerks = new List<IPetRacePerk>();
-        List<IPetRacePerk> epicPerks = new List<IPetRacePerk>();
-        List<IPetRacePerk> legendaryPerks = new List<IPetRacePerk>();
-
-        foreach (IPetRacePerk item in perksList)
+    void SetupLeaderboard()
+    {
+        foreach (Transform item in _leaderboardPlayersContainer)
         {
-            tempPerks.Add(new IPetRacePerk(item.id, item.name, item.description, item.rarity));
+            Destroy(item.gameObject);
         }
-
-        foreach (IPetRacePerk perk in player.inventoryPerks)
+        _roomData._players.Sort(delegate (IPetRacePlayer a, IPetRacePlayer b)
         {
-            foreach (IPetRacePerk perkInList in tempPerks)
-            {
-                if (perk.id == perkInList.id)
-                {
-                    if (perk.level == 5)
-                    {
-                        perkInList.level = 5;
-                        continue;
-                    }
-                    else
-                    {
-                        perkInList.level = perk.level + 1;
-                        if (perkInList.rarity == "Common") { commonPerks.Add(perkInList); }
-                        else if (perkInList.rarity == "Rare") { rarePerks.Add(perkInList); }
-                        else if (perkInList.rarity == "Epic") { epicPerks.Add(perkInList); }
-                        else if (perkInList.rarity == "Legendary") { legendaryPerks.Add(perkInList); }
-                    }
-                }
-            }
-        }
+            return b.score.CompareTo(a.score);
+        });
 
-        foreach (IPetRacePerk perk in player.pet.perks)
+        for (int i = 0; i < _roomData._players.Count; i++)
         {
-            foreach (IPetRacePerk perkInList in tempPerks)
-            {
-                if (perk.id == perkInList.id)
-                {
-                    if (perk.level == 5)
-                    {
-                        perkInList.level = 5;
-                        continue;
-                    }
-                    else
-                    {
-                        perkInList.level = perk.level + 1;
-                        if (perkInList.rarity == "Common") { commonPerks.Add(perkInList); }
-                        else if (perkInList.rarity == "Rare") { rarePerks.Add(perkInList); }
-                        else if (perkInList.rarity == "Epic") { epicPerks.Add(perkInList); }
-                        else if (perkInList.rarity == "Legendary") { legendaryPerks.Add(perkInList); }
-                    }
-                }
-            }
+            if (i > 5) { break; }
+            PetRaceLeaderboardPlayer card = Instantiate(_leaderboardPlayerContainer, _leaderboardPlayersContainer);
+            card.SetUp(i + 1, _roomData._players[i]);
         }
-
-        foreach (IPetRacePerk perk in tempPerks)
-        {
-            if (perk.level == 1)
-            {
-                if (perk.rarity == "Common") { commonPerks.Add(perk); }
-                else if (perk.rarity == "Rare") { rarePerks.Add(perk); }
-                else if (perk.rarity == "Epic") { epicPerks.Add(perk); }
-                else if (perk.rarity == "Legendary") { legendaryPerks.Add(perk); }
-            }
-        }
-
-
-        for (int i = 0; i < 3; i++)
-        {
-            int randomNo = Random.Range(0, 101);
-            if (randomNo <= 65)
-            {
-                int randomIndex = Random.Range(0, commonPerks.Count);
-                potentialPerks.Add(commonPerks[randomIndex]);
-                commonPerks.RemoveAt(randomIndex);
-            }
-            else if(randomNo <= 85)
-            {
-                int randomIndex = Random.Range(0, rarePerks.Count);
-                potentialPerks.Add(rarePerks[randomIndex]);
-                rarePerks.RemoveAt(randomIndex);
-            }
-            else if(randomNo <= 95)
-            {
-                int randomIndex = Random.Range(0, epicPerks.Count);
-                potentialPerks.Add(epicPerks[randomIndex]);
-                epicPerks.RemoveAt(randomIndex);
-            }
-            else
-            {
-                int randomIndex = Random.Range(0, legendaryPerks.Count);
-                potentialPerks.Add(legendaryPerks[randomIndex]);
-                legendaryPerks.RemoveAt(randomIndex);
-            }
-        }
-
-        player.perkSelectionPerks = potentialPerks;
     }
 }
