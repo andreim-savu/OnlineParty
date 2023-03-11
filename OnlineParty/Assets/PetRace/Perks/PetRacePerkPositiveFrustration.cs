@@ -12,19 +12,19 @@ public class PetRacePerkPositiveFrustration : PetRacePerk
         switch (_level)
         {
             case 1:
-                movementSpeedModifier = 0.1f;
+                movementSpeedModifier = 0.05f;
                 break;
             case 2:
-                movementSpeedModifier = 0.2f;
+                movementSpeedModifier = 0.01f;
                 break;
             case 3:
-                movementSpeedModifier = 0.3f;
+                movementSpeedModifier = 0.15f;
                 break;
             case 4:
-                movementSpeedModifier = 0.4f;
+                movementSpeedModifier = 0.2f;
                 break;
             case 5:
-                movementSpeedModifier = 0.5f;
+                movementSpeedModifier = 0.25f;
                 break;
         }
         _pet.onGetStunned.AddListener(Active);
