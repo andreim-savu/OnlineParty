@@ -14,19 +14,19 @@ public class PetRacePerkSlowStart : PetRacePerk
         switch (_level)
         {
             case 1:
-                movementSpeedModifier = 1.2f;
+                movementSpeedModifier = 1.1f;
                 break;
             case 2:
-                movementSpeedModifier = 1.4f;
+                movementSpeedModifier = 1.2f;
                 break;
             case 3:
-                movementSpeedModifier = 1.6f;
+                movementSpeedModifier = 1.3f;
                 break;
             case 4:
-                movementSpeedModifier = 1.8f;
+                movementSpeedModifier = 1.4f;
                 break;
             case 5:
-                movementSpeedModifier = 2.0f;
+                movementSpeedModifier = 1.5f;
                 break;
         }
         _pet.onStatsCalculated.AddListener(Active);
