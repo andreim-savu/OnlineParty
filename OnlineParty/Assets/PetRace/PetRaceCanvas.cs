@@ -31,7 +31,7 @@ public class IPetRacePlayer
     public string name;
     public IPetRacePet pet;
     public List<IPetRacePerk> inventoryPerks;
-    public List<IPetRacePerk> perkSelectionPerks;
+    public string perkSelectionPerks;
     public bool isReady;
     public int coins;
     public int freeRerolls;
